@@ -33,23 +33,15 @@
 
   			-webkit-animation-iteration-count: infinite;
   			-webkit-animation-direction: normal, normal;
-  		  -webkit-animation-timing-function: linear, ease-in;
+/*  		  -webkit-animation-timing-function: linear, ease-in;*/
 
         -webkit-animation-name: spin;
     		-webkit-animation-duration: 8s;
         
-        /*-moz-transform: rotate(-90deg);*/
-        /*
-  			-webkit-animation-iteration-count: infinite;
-  			-webkit-animation-direction: normal, normal;
-			  -webkit-animation-timing-function: linear, ease-in;
-  			
-  			-webkit-animation-name: move;
-  			-webkit-animation-duration: 5s;*/
-/*  			-webkit-transform-origin: 50% -100%;*/
       }
       
       #users li span{
+          display: block;
           font-family: 'Helvetica Neue';
           padding: 0.2em 0.5em;
       }
@@ -64,25 +56,7 @@
         background: #000;
         color: #ff1cae;
         font-size: -=2;
-        font-weight: 100;
-      }
-      
-      
-      
-      #users li span {
-        display: block;
-      /*  background: #00ff00;
-        border: 2px solid #000;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;
-        padding: 3px;
-        
-			-webkit-animation-iteration-count: infinite;
-			-webkit-animation-direction: normal, normal;
-		  -webkit-animation-timing-function: linear, ease-in;
-		  
-        -webkit-animation-name: spin;
-  			-webkit-animation-duration: 5s;*/
+/*        font-weight: 100;*/
       }
       
       @-webkit-keyframes spin {
@@ -90,35 +64,41 @@
           -webkit-transform: rotate(0deg);
         }
         100% {
-          -webkit-transform: rotate(-720deg); 
+          -webkit-transform: rotate(-360deg); 
         }
       }
-      
-      @-webkit-keyframes move {
-        0%  {
-          -webkit-transform: translate(400px,0px);
-        }
-        100% {
-          -webkit-transform: translate(400px,300px); 
-        }
+
       }
       
     </style>
   </head>
   <body id="" onload="">
      <script type="text/javascript">
-
-          $(document).ready(function(){
-            //$("#spinner").styl
-            
-            $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
-              $.each(users, function(i, user){
-           //     if (user.ap != 0){
-                  $("<li id=\""+ user.id +"\" style=\"z-index: " + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">" + user.ap + "</span>").appendTo("#users");
-             //   }
-              });
+        $(document).ready(function(){
+          $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
+            $.each(users, function(i, user){
+         //     if (user.ap != 0){
+                $("<li id=\""+ user.id +"\" style=\"z-index: " + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">" + user.ap + "</span>").appendTo("#users");
+                
+                // Kolla att användarens LI inte är utanför skärmen (på högra sidan):
+                var outsideWindowX = $('#users > li#' + user.id).position().left + $('#users > li#' + user.id).width() - window.innerWidth + 20;
+                if (outsideWindowX > 0) {
+                  var newX = $('#users > li#' + user.id).position().left - outsideWindowX - 30;
+                  $('#users > li#' + user.id).css("left", newX + "px");
+                }
+                
+                var outsideWindowY = $('#users > li#' + user.id).position().top + $('#users > li#' + user.id).height() - window.innerHeight + 20;
+                if (outsideWindowY > 0) {
+                  console.log(user.username + " är utanför");
+                  var newY = $('#users > li#' + user.id).position().top - outsideWindowY - 30;
+                  $('#users > li#' + user.id).css("top", newY + "px");
+                }
+                
+                
+           //   }
             });
           });
+        });
     </script>
     <ul id="users"></ul>
   </body>
