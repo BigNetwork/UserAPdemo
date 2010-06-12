@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Page Title</title>
+    <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+      html, body{
+        height: 100%;
+      }
+      body {
+        background: #ff1cae;
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #users {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+        position: relative;
+        height: 100%;
+      }
+      
+      #users li {
+        display: inline-block;
+        position: absolute;
+        
+        background: #00ff00;
+        border: 2px solid #000;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        text-align: center;
+
+  			-webkit-animation-iteration-count: infinite;
+  			-webkit-animation-direction: normal, normal;
+  		  -webkit-animation-timing-function: linear, ease-in;
+
+        -webkit-animation-name: spin;
+    		-webkit-animation-duration: 8s;
+        
+        /*-moz-transform: rotate(-90deg);*/
+        /*
+  			-webkit-animation-iteration-count: infinite;
+  			-webkit-animation-direction: normal, normal;
+			  -webkit-animation-timing-function: linear, ease-in;
+  			
+  			-webkit-animation-name: move;
+  			-webkit-animation-duration: 5s;*/
+/*  			-webkit-transform-origin: 50% -100%;*/
+      }
+      
+      #users li span{
+          font-family: 'Helvetica Neue';
+          padding: 0.2em 0.5em;
+      }
+      
+      #users li span.username{
+        background: none;
+        color: #000;    
+/*        font-weight: bold;*/
+      }
+      
+      #users li span.ap{
+        background: #000;
+        color: #ff1cae;
+        font-size: -=2;
+        font-weight: 100;
+      }
+      
+      
+      
+      #users li span {
+        display: block;
+      /*  background: #00ff00;
+        border: 2px solid #000;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        padding: 3px;
+        
+			-webkit-animation-iteration-count: infinite;
+			-webkit-animation-direction: normal, normal;
+		  -webkit-animation-timing-function: linear, ease-in;
+		  
+        -webkit-animation-name: spin;
+  			-webkit-animation-duration: 5s;*/
+      }
+      
+      @-webkit-keyframes spin {
+        0%  {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(-720deg); 
+        }
+      }
+      
+      @-webkit-keyframes move {
+        0%  {
+          -webkit-transform: translate(400px,0px);
+        }
+        100% {
+          -webkit-transform: translate(400px,300px); 
+        }
+      }
+      
+    </style>
+  </head>
+  <body id="" onload="">
+     <script type="text/javascript">
+
+          $(document).ready(function(){
+            //$("#spinner").styl
+            
+            $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
+              $.each(users, function(i, user){
+           //     if (user.ap != 0){
+                  $("<li id=\""+ user.id +"\" style=\"z-index: " + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">" + user.ap + "</span>").appendTo("#users");
+             //   }
+              });
+            });
+          });
+    </script>
+    <ul id="users"></ul>
+  </body>
+</html>

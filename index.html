@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>index</title>
+    <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+      body {
+        
+          background: #ff1cae;
+        
+      }
+      #users {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+      }
+      
+      #users li {
+        display: inline-block;
+        background: #00ff00;
+        border: 2px solid #000;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        padding: 3px;
+        /*-moz-transform: rotate(-90deg);*/
+      }
+    
+    </style>
+  </head>
+  <body id="index" onload="">
+    <script type="text/javascript">
+    
+        $(document).ready(function(){
+          $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
+            $.each(users, function(i, user){
+              //if (user.ap != 0)
+               $("<li id=\""+ user.id +"\" style=\"font-size:"+ (parseInt(user.ap/100)+11) +"\">").html(user.username + " - " + user.ap).appendTo("#users");
+             })
+             //animateUsers(0);
+             renderUsers(0);
+            //rotateUsers(0);
+          });
+          //$("#users.li").each();
+        });
+       
+       // third try (can't animate functions (rotate() in jquery)
+       function animateUsers(rotateCounter) {
+         
+          $('#users > li').each(function(i, user) {
+           
+            reanimateUsersFromTheDead(user, rotateCounter);
+            /*$(user).stop().animate({
+              '-moz-transform' : "rotate(-"+ rotateCounter +"deg)"
+            }, 200, animateUsers(parseInt(rotateCounter)+30));
+            */
+          })
+       }
+       
+       function reanimateUsersFromTheDead(user, rotateCounter) {
+         console.log(user);
+         $(user).animate({
+           '-moz-transform' : "rotate(-"+ rotateCounter +"deg)"
+         }, 200, reanimateUsersFromTheDead(user, (parseInt(rotateCounter)+30) ));
+         
+       }
+       
+       // second try -  Dubble buffering. (SLOW)
+       function renderUsers(rotateCounter) {
+          var newFrame = "";
+             $('#users > li').each(function(i, user) {
+                newFrame += "<li id=\""+ user.id +"\" style=\"font-size:"+ $(user).css('font-size') +"; -moz-transform: rotate(-"+ rotateCounter +"deg);\">" + $(user).html() +"</li>";
+//                newFrame += "<li id=\""+ user.id +"\" style=\"font-size:"+ $(user).css('font-size') +"; -webkit-transform: rotate(-"+ rotateCounter +"deg);\">" + $(user).html() +"</li>";
+              });
+              $('#users').html(newFrame);
+          setTimeout("renderUsers("+ ++rotateCounter +")", 30);
+       }
+       
+       // first try - tick every element in loop (SLOW)
+       function rotateUsers(rotateCounter) {
+         
+        // just happend to delete this code.
+ 
+      //   setTimeout("rotateUsers("+ ++rotateCounter +")", 30);
+       }
+        
+    </script>
+    <ul id="users">
+      
+    </ul>
+  </body>
+</html>
