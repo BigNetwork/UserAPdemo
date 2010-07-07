@@ -44,9 +44,10 @@
         -webkit-border-top-left-radius: 0.3em;
         -webkit-border-top-right-radius: 0.3em;
         background: #00ff00;
-        border: 5px solid #000;
+        border: 0.1em solid #000;
         color: #000;    
 /*        font-weight: bold;*/
+/*        text-shadow: 0 2px 0 #9f9;*/
       }
       
       #users li span.ap{
@@ -77,7 +78,7 @@
   <body id="" onload="">
      <script type="text/javascript">
         $(document).ready(function(){
-          $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
+          $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json&callback=?", function(users){
             $.each(users, function(i, user){
          //     if (user.ap != 0){
                 $("<li id=\""+ user.id +"\" style=\"z-index: " + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");
