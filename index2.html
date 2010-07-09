@@ -22,14 +22,21 @@
       }
       
       #users li {
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-direction: normal, normal;
-        /*-webkit-animation-timing-function: linear, ease-in;*/
-        -webkit-animation-name: spin;
-        -webkit-animation-duration: 8s;
         display: inline-block;
         position: absolute;
         text-align: center;
+      }
+      
+      #users li.spin {
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-direction: normal, normal;
+        -webkit-animation-timing-function: linear, ease-in;
+        -webkit-animation-name: spin;
+        -webkit-animation-duration: 8s;
+      }
+      
+      #users li.focus{
+          -webkit-transition:all 1.0s ease;
       }
       
       #users li span{
@@ -62,6 +69,11 @@
 /*        font-weight: 100;*/
       }
       
+      .zeroAP {
+        opacity: 0.5;
+      }
+      
+      
       @-webkit-keyframes spin {
         0%  {
           -webkit-transform: rotate(0deg);
@@ -70,18 +82,28 @@
           -webkit-transform: rotate(-360deg); 
         }
       }
-
+/*
+      @-webkit-keyframes focus {
+      from  {
+          left: 0px;
+          top: 0px;
+        }
+        to {
+          left: 500px;
+          top: 500px;
+        }
       }
-      
+  */    
     </style>
   </head>
   <body id="" onload="">
      <script type="text/javascript">
+     var usersWithAP = new Array();
         $(document).ready(function(){
           $.getJSON("http://94.247.168.234/bls/index.php?controller=user&action=all&format=json&callback=?", function(users){
             $.each(users, function(i, user){
          //     if (user.ap != 0){
-                $("<li id=\""+ user.id +"\" style=\"z-index: " + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");
+                $("<li id=\""+ user.id +"\" class=\"spin " + (user.ap > 0 ? "" : "zeroAP") + "\" style=\"z-index: -" + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");
                 
                 // Kolla att användarens LI inte är utanför skärmen (på högra sidan):
                 var outsideWindowX = $('#users > li#' + user.id).position().left + $('#users > li#' + user.id).width() - window.innerWidth + 20;
@@ -98,11 +120,25 @@
                   $('#users > li#' + user.id).css("top", newY + "px");
                 }
                 
+                if (user.ap > 0) {
+                  usersWithAP.push(user.id);
+                }
                 
            //   }
-            });
-          });
-        });
+            }); // End each
+          focusUser(0);
+          }); // End getJSON
+        }); // End document.ready
+        
+        
+        function focusUser(index) {
+          
+          //knfsdalkfds.stop().animate(sadf);
+          
+          $("#" + usersWithAP[index]).stop().css("-webkit-animation-iteration-count", "1");//.removeClass("spin").addClass("focus").css("left", "50%");
+          
+        }
+        
         
         /*
         * thousandSeparator (NUMBER n, STRING separator) STRING
