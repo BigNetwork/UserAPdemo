@@ -1,91 +1,186 @@
+<!--doctype html-->
 <html>
   <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>index</title>
+    <meta charset="utf-8">
+    <title>Highscore</title>
     <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css">
+      html, body{
+        height: 100%;
+      }
       body {
-        
-          background: #ff1cae;
-        
+        background: #ff1cae;
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
       }
       #users {
         list-style-type: none;
         margin: 0px;
         padding: 0px;
+        position: relative;
+        height: 100%;
       }
       
       #users li {
         display: inline-block;
-        background: #00ff00;
-        border: 2px solid #000;
-        -moz-border-radius: 8px;
-        -webkit-border-radius: 8px;
-        padding: 3px;
-        /*-moz-transform: rotate(-90deg);*/
+        position: absolute;
+        text-align: center;
       }
-    
+      
+      #users li.spin {
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-direction: normal, normal;
+        -webkit-animation-timing-function: linear, ease-in;
+        -webkit-animation-name: spin;
+        -webkit-animation-duration: 8s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-direction: normal, normal;
+        -moz-animation-timing-function: linear, ease-in;
+        -moz-animation-name: spin;
+        -moz-animation-duration: 8s;
+      }
+      
+      #users li.focus{
+          -webkit-transition:all 1.0s ease;
+	       -moz-transition:all 1.0s ease;
+      }
+      
+      #users li span{
+          display: block;
+          font-family: 'Helvetica Neue';
+          padding: 0.2em 0.5em;
+      }
+      
+      #users li span.username{
+        -moz-border-radius-top-left: 0.3em;
+        -moz-border-radius-top-right: 0.3em;
+        -webkit-border-top-left-radius: 0.3em;
+        -webkit-border-top-right-radius: 0.3em;
+        background: #00ff00;
+        border: 0.1em solid #000;
+        color: #000;    
+/*        font-weight: bold;*/
+/*        text-shadow: 0 2px 0 #9f9;*/
+      }
+      
+      #users li span.ap{
+        -moz-border-radius-bottom-left: 0.3em;
+        -moz-border-radius-bottom-right: 0.3em;
+        -webkit-border-bottom-left-radius: 0.3em;
+        -webkit-border-bottom-right-radius: 0.3em;
+        background: #000;
+        color: #ff1cae;
+        font-size: -=2;
+        white-space: nowrap;
+/*        font-weight: 100;*/
+      }
+      
+      .zeroAP {
+        opacity: 0.5;
+      }
+      
+      
+      @-webkit-keyframes spin {
+        0%  {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(-360deg); 
+        }
+      }
+
+		@-moz-keyframes spin {
+        0%  {
+          -moz-transform: rotate(0deg);
+        }
+        100% {
+          -moz-transform: rotate(-360deg); 
+        }
+      }
+/*
+      @-webkit-keyframes focus {
+      from  {
+          left: 0px;
+          top: 0px;
+        }
+        to {
+          left: 500px;
+          top: 500px;
+        }
+      }
+  */    
     </style>
   </head>
-  <body id="index" onload="">
-    <script type="text/javascript">
-    
+  <body id="" onload="">
+     <script type="text/javascript">
+     var usersWithAP = new Array();
         $(document).ready(function(){
-          $.getJSON("http://localhost/~vs/bls/index.php?event=wg11&controller=user&action=all&format=json", function(users){
+          $.getJSON("http://www.wintergate.se/index.php?event=wg11&controller=user&action=all&format=json&callback=?", function(users){
             $.each(users, function(i, user){
-              //if (user.ap != 0)
-               $("<li id=\""+ user.id +"\" style=\"font-size:"+ (parseInt(user.ap/100)+11) +"\">").html(user.username + " - " + user.ap).appendTo("#users");
-             })
-             //animateUsers(0);
-             renderUsers(0);
-            //rotateUsers(0);
-          });
-          //$("#users.li").each();
-        });
-       
-       // third try (can't animate functions (rotate() in jquery)
-       function animateUsers(rotateCounter) {
-         
-          $('#users > li').each(function(i, user) {
-           
-            reanimateUsersFromTheDead(user, rotateCounter);
-            /*$(user).stop().animate({
-              '-moz-transform' : "rotate(-"+ rotateCounter +"deg)"
-            }, 200, animateUsers(parseInt(rotateCounter)+30));
-            */
-          })
-       }
-       
-       function reanimateUsersFromTheDead(user, rotateCounter) {
-         console.log(user);
-         $(user).animate({
-           '-moz-transform' : "rotate(-"+ rotateCounter +"deg)"
-         }, 200, reanimateUsersFromTheDead(user, (parseInt(rotateCounter)+30) ));
-         
-       }
-       
-       // second try -  Dubble buffering. (SLOW)
-       function renderUsers(rotateCounter) {
-          var newFrame = "";
-             $('#users > li').each(function(i, user) {
-                newFrame += "<li id=\""+ user.id +"\" style=\"font-size:"+ $(user).css('font-size') +"; -moz-transform: rotate(-"+ rotateCounter +"deg);\">" + $(user).html() +"</li>";
-//                newFrame += "<li id=\""+ user.id +"\" style=\"font-size:"+ $(user).css('font-size') +"; -webkit-transform: rotate(-"+ rotateCounter +"deg);\">" + $(user).html() +"</li>";
-              });
-              $('#users').html(newFrame);
-          setTimeout("renderUsers("+ ++rotateCounter +")", 30);
-       }
-       
-       // first try - tick every element in loop (SLOW)
-       function rotateUsers(rotateCounter) {
-         
-        // just happend to delete this code.
- 
-      //   setTimeout("rotateUsers("+ ++rotateCounter +")", 30);
-       }
+         //     if (user.ap != 0){
+                $("<li id=\""+ user.id +"\" class=\"spin " + (user.ap > 0 ? "" : "zeroAP") + "\" style=\"z-index: -" + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");
+                
+                // Kolla att användarens LI inte är utanför skärmen (på högra sidan):
+                var outsideWindowX = $('#users > li#' + user.id).position().left + $('#users > li#' + user.id).width() - window.innerWidth + 20;
+                if (outsideWindowX > 0) {
+                  var newX = $('#users > li#' + user.id).position().left - outsideWindowX - 30;
+                  $('#users > li#' + user.id).css("left", newX + "px");
+                }
+                
+                // Kolla att användarens LI inte är utanför skärmen (på nedre sidan):
+                var outsideWindowY = $('#users > li#' + user.id).position().top + $('#users > li#' + user.id).height() - window.innerHeight + 20;
+                if (outsideWindowY > 0) {
+                  console.log(user.username + " är utanför");
+                  var newY = $('#users > li#' + user.id).position().top - outsideWindowY - 30;
+                  $('#users > li#' + user.id).css("top", newY + "px");
+                }
+                
+                if (user.ap > 0) {
+                  usersWithAP.push(user.id);
+                }
+                
+           //   }
+            }); // End each
+          focusUser(0);
+          }); // End getJSON
+        }); // End document.ready
+        
+        
+        function focusUser(index) {
+          
+          //knfsdalkfds.stop().animate(sadf);
+          
+          $("#" + usersWithAP[index]).stop().css("-webkit-animation-iteration-count", "1").css("-moz-animation-iteration-count", "1");//.removeClass("spin").addClass("focus").css("left", "50%");
+          
+        }
+        
+        
+        /*
+        * thousandSeparator (NUMBER n, STRING separator) STRING
+        * or
+        * thousandSeparator (String n, STRING sep) STRING
+        *
+        * Convert a number to the format xxx,xxx,xxx.xxxx
+        * Accepts integers, floating point or string
+        *
+        * Does not accept exponential notation, etc.
+        *
+        * n – the number to be formatted
+        * sep – the separator character. if skipped, “,” is used
+        */
+        function thousandSeparator(n,sep) {
+          var sRegExp = new RegExp('(-?[0-9]+)([0-9]{3})'), sValue=n+"";
+          if (sep === undefined) {
+            sep=',';
+          }
+          while(sRegExp.test(sValue)) {
+            sValue = sValue.replace(sRegExp, '$1'+sep+'$2');
+          }
+          return sValue;
+        }
         
     </script>
-    <ul id="users">
-      
-    </ul>
+    <ul id="users"></ul>
   </body>
 </html>
