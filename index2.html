@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>Page Title</title>
+    <title>Highscore</title>
     <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css">
       html, body{
@@ -100,7 +100,7 @@
      <script type="text/javascript">
      var usersWithAP = new Array();
         $(document).ready(function(){
-          $.getJSON("http://94.247.168.234/bls/index.php?controller=user&action=all&format=json&callback=?", function(users){
+          $.getJSON("http://www.wintergate.se/index.php?event=wg11&controller=user&action=all&format=json&callback=?", function(users){
             $.each(users, function(i, user){
          //     if (user.ap != 0){
                 $("<li id=\""+ user.id +"\" class=\"spin " + (user.ap > 0 ? "" : "zeroAP") + "\" style=\"z-index: -" + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");

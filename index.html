@@ -31,7 +31,7 @@
     <script type="text/javascript">
     
         $(document).ready(function(){
-          $.getJSON("http://localhost/~vs/bls/index.php?controller=user&action=all&format=json", function(users){
+          $.getJSON("http://localhost/~vs/bls/index.php?event=wg11&controller=user&action=all&format=json", function(users){
             $.each(users, function(i, user){
               //if (user.ap != 0)
                $("<li id=\""+ user.id +"\" style=\"font-size:"+ (parseInt(user.ap/100)+11) +"\">").html(user.username + " - " + user.ap).appendTo("#users");
