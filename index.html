@@ -21,13 +21,13 @@
         position: relative;
         height: 100%;
       }
-      
+
       #users li {
         display: inline-block;
         position: absolute;
         text-align: center;
       }
-      
+
       #users li.spin {
         -webkit-animation-iteration-count: infinite;
         -webkit-animation-direction: normal, normal;
@@ -40,18 +40,18 @@
         -moz-animation-name: spin;
         -moz-animation-duration: 8s;
       }
-      
+
       #users li.focus{
           -webkit-transition:all 1.0s ease;
 	       -moz-transition:all 1.0s ease;
       }
-      
+
       #users li span{
           display: block;
           font-family: 'Helvetica Neue';
           padding: 0.2em 0.5em;
       }
-      
+
       #users li span.username{
         -moz-border-radius-top-left: 0.3em;
         -moz-border-radius-top-right: 0.3em;
@@ -59,11 +59,11 @@
         -webkit-border-top-right-radius: 0.3em;
         background: #00ff00;
         border: 0.1em solid #000;
-        color: #000;    
+        color: #000;
 /*        font-weight: bold;*/
 /*        text-shadow: 0 2px 0 #9f9;*/
       }
-      
+
       #users li span.ap{
         -moz-border-radius-bottom-left: 0.3em;
         -moz-border-radius-bottom-right: 0.3em;
@@ -75,18 +75,18 @@
         white-space: nowrap;
 /*        font-weight: 100;*/
       }
-      
+
       .zeroAP {
         opacity: 0.5;
       }
-      
-      
+
+
       @-webkit-keyframes spin {
         0%  {
           -webkit-transform: rotate(0deg);
         }
         100% {
-          -webkit-transform: rotate(-360deg); 
+          -webkit-transform: rotate(-360deg);
         }
       }
 
@@ -95,7 +95,7 @@
           -moz-transform: rotate(0deg);
         }
         100% {
-          -moz-transform: rotate(-360deg); 
+          -moz-transform: rotate(-360deg);
         }
       }
 /*
@@ -109,25 +109,25 @@
           top: 500px;
         }
       }
-  */    
+  */
     </style>
   </head>
   <body id="" onload="">
      <script type="text/javascript">
      var usersWithAP = new Array();
         $(document).ready(function(){
-          $.getJSON("http://www.wintergate.se/index.php?event=wg11&controller=user&action=all&format=json&callback=?", function(users){
+          $.getJSON("https://lan.bignetwork.se/index.php?event=wg11&controller=user&action=all&format=json&callback=?", function(users){
             $.each(users, function(i, user){
          //     if (user.ap != 0){
                 $("<li id=\""+ user.id +"\" class=\"spin " + (user.ap > 0 ? "" : "zeroAP") + "\" style=\"z-index: -" + user.ap + "; font-size:"+ (parseInt(user.ap/100)+11) +"; top:"+ (3+Math.round(Math.random()*80)) +"%; left:"+ Math.round(Math.random()*98) +"%;\">").html("<span class=\"username\">" + user.username + "</span><span class=\"ap\">AP: " + thousandSeparator(user.ap, " ") + "</span>").appendTo("#users");
-                
+
                 // Kolla att användarens LI inte är utanför skärmen (på högra sidan):
                 var outsideWindowX = $('#users > li#' + user.id).position().left + $('#users > li#' + user.id).width() - window.innerWidth + 20;
                 if (outsideWindowX > 0) {
                   var newX = $('#users > li#' + user.id).position().left - outsideWindowX - 30;
                   $('#users > li#' + user.id).css("left", newX + "px");
                 }
-                
+
                 // Kolla att användarens LI inte är utanför skärmen (på nedre sidan):
                 var outsideWindowY = $('#users > li#' + user.id).position().top + $('#users > li#' + user.id).height() - window.innerHeight + 20;
                 if (outsideWindowY > 0) {
@@ -135,27 +135,27 @@
                   var newY = $('#users > li#' + user.id).position().top - outsideWindowY - 30;
                   $('#users > li#' + user.id).css("top", newY + "px");
                 }
-                
+
                 if (user.ap > 0) {
                   usersWithAP.push(user.id);
                 }
-                
+
            //   }
             }); // End each
           focusUser(0);
           }); // End getJSON
         }); // End document.ready
-        
-        
+
+
         function focusUser(index) {
-          
+
           //knfsdalkfds.stop().animate(sadf);
-          
+
           $("#" + usersWithAP[index]).stop().css("-webkit-animation-iteration-count", "1").css("-moz-animation-iteration-count", "1");//.removeClass("spin").addClass("focus").css("left", "50%");
-          
+
         }
-        
-        
+
+
         /*
         * thousandSeparator (NUMBER n, STRING separator) STRING
         * or
@@ -179,7 +179,7 @@
           }
           return sValue;
         }
-        
+
     </script>
     <ul id="users"></ul>
   </body>
